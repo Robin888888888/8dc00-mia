@@ -139,7 +139,7 @@ def ls_solve_test():
     #------------------------------------------------------------------#
     # TODO: Test your implementation of the ls_solve definition
     #------------------------------------------------------------------#
-
+    pass
 
 def ls_affine_test():
 

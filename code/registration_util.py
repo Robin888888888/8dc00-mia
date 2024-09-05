@@ -46,6 +46,7 @@ def t2h(T, t):
     #------------------------------------------------------------------#
     # TODO: Implement conversion of a transformation matrix and a translation vector to homogeneous transformation matrix.
     #------------------------------------------------------------------#
+	pass
 
 
 def plot_object(ax, X):
