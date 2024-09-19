@@ -46,9 +46,15 @@ def combining_transforms():
 
     X = util.test_object(1)
 
-    #------------------------------------------------------------------#
-    # TODO: Experiment with combining transformation matrices.
-    #------------------------------------------------------------------#
+    X_rot = reg.rotate(3*np.pi/4)
+    X_shear = reg.shear(1, 0.2)
+    X_reflect = reg.reflect(-1, -1)
+
+    T=X_rot.dot(X_shear).dot(X_reflect).dot(X)
+
+    fig = plt.figure(figsize=(12,5))
+    ax1 = fig.add_subplot(141, xlim=(-4,4), ylim=(-4,4))
+    util.plot_object(ax1,T)
 
 
 def t2h_test():
@@ -136,10 +142,11 @@ def image_transform_test():
 
 def ls_solve_test():
 
-    #------------------------------------------------------------------#
-    # TODO: Test your implementation of the ls_solve definition
-    #------------------------------------------------------------------#
-    pass
+    A=np.array([[3,4],[5,6],[7,8],[17,10]])
+    b=np.array([[1],[2],[3],[4]])
+    
+    w,E=reg.ls_solve(A,b)
+    return w
 
 def ls_affine_test():
 
@@ -191,12 +198,16 @@ def correlation_test():
     C1 = reg.correlation(I, I)
     # the self correlation should be very close to 1
     assert abs(C1 - 1) < 10e-10, "Correlation function is incorrectly implemented (self correlation test)"
+    C2=reg.correlation(I, 2*I)
+    print(C2)
+    #print('Test successful!')
 
-    #------------------------------------------------------------------#
-    # TODO: Implement a few more tests of the correlation definition
-    #------------------------------------------------------------------#
-
-    print('Test successful!')
+def joint_histogram_test(A,B):
+    JH=reg.joint_histogram(A,B)
+    fig = plt.figure(figsize=(12,5))
+    ax1 = fig.add_subplot(131)
+    im11 = ax1.imshow(JH)
+    pass
 
 
 def mutual_information_test():
@@ -207,11 +218,12 @@ def mutual_information_test():
     p1 = reg.joint_histogram(I, I)
     MI1 = reg.mutual_information(p1)
 
-    #------------------------------------------------------------------#
-    # TODO: Implement a few tests of the mutual_information definition
-    #------------------------------------------------------------------#
-
-    print('Test successful!')
+    print(MI1)
+    rand1=np.random.randint(255, size=(512, 512))
+    rand2=np.random.randint(255, size=(512, 512))
+    p2=reg.joint_histogram(rand1,rand2)
+    MI2=reg.mutual_information(p2)
+    print(MI2)
 
 
 def mutual_information_e_test():
