@@ -48,7 +48,7 @@ def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='c
     similarity = np.full((num_iter, 1), np.nan)
     if type=='affine':
         params = np.full((num_iter, 7), np.nan)
-    elif type=='corr':
+    elif type=='rigid':
         params = np.full((num_iter,3),np.nan)
 
     fig = plt.figure(figsize=(14,6))
@@ -84,6 +84,7 @@ def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='c
             S, Im_t, _ = reg.rigid_corr(I, Im, x, return_transform=True)
         elif type=='affine':
             S, Im_t, _ = reg.affine_corr(I, Im, x, return_transform=True)
+            
         if evaluation_metric=='mi':
             p=reg.joint_histogram(I,Im_t)
             MI=reg.mutual_information_e(p)
