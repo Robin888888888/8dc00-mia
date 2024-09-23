@@ -8,7 +8,7 @@ import registration as reg
 from IPython.display import display, clear_output
 
 
-def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='corr',learning_rate=0.001,number_of_iterations=150):
+def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='corr',live_visual=True,learning_rate=0.001,number_of_iterations=150):
 
     # read the fixed and moving images
     # change these in order to read different images
@@ -61,7 +61,11 @@ def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='c
     # moving image
     im2 = ax1.imshow(I, alpha=0.7)
     # parameters
-    txt = ax1.text(0.3, 0.95,
+    # txt = ax1.text(0.3, 0.95,
+    #     np.array2string(x, precision=5, floatmode='fixed'),
+    #     bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10},
+    #     transform=ax1.transAxes)
+    txt = ax1.text(0.05, 0.95,
         np.array2string(x, precision=5, floatmode='fixed'),
         bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10},
         transform=ax1.transAxes)
@@ -89,11 +93,12 @@ def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='c
             p=reg.joint_histogram(I,Im_t)
             MI=reg.mutual_information_e(p)
 
-        clear_output(wait = True)
+        if live_visual==True:
+            clear_output(wait = True)
 
-        # update moving image and parameters
-        im2.set_data(Im_t)
-        txt.set_text(np.array2string(x, precision=5, floatmode='fixed'))
+            # update moving image and parameters
+            im2.set_data(Im_t)
+            txt.set_text(np.array2string(x, precision=5, floatmode='fixed'))
 
         # update 'learning' curve
         if evaluation_metric=='mi':
@@ -101,9 +106,14 @@ def intensity_based_registration(image1,image2,type='rigid',evaluation_metric='c
         elif evaluation_metric=='corr':
             similarity[k] = S
         params[k]=x
+
+        if live_visual==True:
+            learning_curve.set_ydata(similarity)
+            display(fig)
+    if live_visual==False:
+        im2.set_data(Im_t)
+        txt.set_text(np.array2string(x, precision=5, floatmode='fixed'))
         learning_curve.set_ydata(similarity)
-
-
         display(fig)
 
     max_similarity=max(similarity)
